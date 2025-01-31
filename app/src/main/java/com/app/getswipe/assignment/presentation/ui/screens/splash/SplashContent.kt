@@ -28,9 +28,9 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashContent(onSplashEnd: () -> Unit) {
     val context = LocalContext.current
-    // Simulate some delay (splash screen duration)
+
     LaunchedEffect(Unit) {
-        delay(2000) // Show splash screen for 2 seconds
+        delay(2000)
         onSplashEnd()
     }
 
