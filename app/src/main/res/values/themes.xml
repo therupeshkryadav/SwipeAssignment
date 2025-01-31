@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base theme for the app -->
+    <style name="Theme.SwipeAssignment" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Customize your main theme (colors, typography, etc.) -->
+        <!-- You can override other properties here like window background, etc. -->
+    </style>
+
+    <!-- Theme for the splash screen -->
+    <style name="Theme.Splash" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Set a custom background for the splash screen -->
+
+        <!-- Optionally, you can customize other splash screen properties -->
+    </style>
+
+</resources>
