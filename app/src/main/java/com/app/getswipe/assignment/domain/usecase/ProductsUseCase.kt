@@ -81,7 +81,7 @@ class AddProductUseCase(
     }
 }
 
-class SyncAndClearOfflineProductsUseCase(
+class SyncOfflineProductsUseCase(
     private val productRepository: ProductRepository,
     private val context: Context
 ) {
@@ -112,9 +112,6 @@ class SyncAndClearOfflineProductsUseCase(
                     files = imageParts
                 )
             }
-
-            // Clear offline products if syncing is successful
-            productRepository.clearOfflineProducts()
 
             Result.success(Unit)
         } catch (e: Exception) {

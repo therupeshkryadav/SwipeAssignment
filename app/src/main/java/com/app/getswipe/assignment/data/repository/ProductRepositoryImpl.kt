@@ -84,17 +84,12 @@ class ProductRepositoryImpl(
                     files = files
                 )
             }
-            clearOfflineProducts()
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    //clears the list
-    override fun clearOfflineProducts() {
-        sharedPreferencesHelper.clearOfflineProducts()
-    }
 }
 
 fun isNetworkAvailable(connectivityManager: ConnectivityManager): Boolean {

@@ -1,15 +1,18 @@
 package com.app.getswipe.assignment.data.local
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
+import androidx.core.net.toUri
 import com.app.getswipe.assignment.domain.model.Product
-import com.app.getswipe.assignment.utils.convertFileToBase64
 import com.app.getswipe.assignment.utils.convertRequestBodyToString
+import com.app.getswipe.assignment.utils.getFilePathFromUri
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
-class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferences) {
+class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferences,private val context: Context) {
 
     private val gson = Gson()
 
@@ -28,7 +31,9 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
         val taxDouble = convertRequestBodyToString(tax).toDoubleOrNull() ?: 0.0
 
         val imageFile = files.firstOrNull()
-        val imageUri = imageFile?.let { convertFileToBase64(it) }
+        val filePath = imageFile?.let { getFilePathFromUri(context, it.toString().toUri()) }
+
+        Log.d("fatalI",filePath.toString())
 
         val offlineProducts = getOfflineProducts().toMutableList()
 
@@ -37,7 +42,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
             product_type = productTypeStr,
             price = priceDouble,
             tax = taxDouble,
-            image = imageUri.toString()
+            image = filePath
         )
 
         // Add the product to the offline list
@@ -58,17 +63,12 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
         return gson.fromJson(productListJson, productType)
     }
 
-    // Clear all offline products
-    fun clearOfflineProducts() {
-        val editor = sharedPreferences.edit()
-        editor.remove(OFFLINE_PRODUCTS_KEY)
-        editor.apply()
-    }
 
     companion object {
-        private const val OFFLINE_PRODUCTS_KEY = "offline_products_saved"
+        private const val OFFLINE_PRODUCTS_KEY = "added_products_saved"
     }
 }
+
 
 
 

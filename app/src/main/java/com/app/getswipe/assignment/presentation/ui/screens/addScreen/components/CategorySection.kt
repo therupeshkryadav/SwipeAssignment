@@ -39,6 +39,7 @@ fun CategorySection(
 ) {
     // Track dropdown state
     var isSelected by remember { mutableStateOf(false) }
+    var isClicked by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -67,7 +68,7 @@ fun CategorySection(
                 .background(Color.White, RoundedCornerShape(20.dp))
                 .border(
                     width = 1.dp,
-                    color = if(!isError) Color.LightGray else Color.Red,
+                    color = if(!isError || isClicked) Color.LightGray else Color.Red,
                     shape = RoundedCornerShape(20.dp)
                 )
                 .clickable(
@@ -75,6 +76,7 @@ fun CategorySection(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null // Disables ripple effect
                 ) {
+                    isClicked = true
                     isSelected = !isSelected // Toggle dropdown arrow state
                     onCategorySelection()
                 },
@@ -101,7 +103,7 @@ fun CategorySection(
             textStyle = TextStyle(fontSize = 16.sp)
         )
 
-        if(isError){
+        if(isError && !isClicked){
             Text(
                 modifier = Modifier.padding(start = 16.dp,top = 8.dp),
                 text = errorMessage,color = Color.Red,

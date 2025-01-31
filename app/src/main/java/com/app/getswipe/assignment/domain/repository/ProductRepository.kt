@@ -26,5 +26,4 @@ interface ProductRepository {
 
     fun getOfflineProducts(): List<Product>
     suspend fun syncOfflineProducts(): Result<Unit>
-    fun clearOfflineProducts()
 }
