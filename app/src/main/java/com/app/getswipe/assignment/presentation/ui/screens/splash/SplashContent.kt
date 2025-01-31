@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -53,7 +54,7 @@ fun SplashContent(onSplashEnd: () -> Unit) {
             painter = painterResource(R.drawable.brand_logo),
             contentDescription = "Brand Logo")
         Spacer(Modifier.height(16.dp))
-        Text("Welcome to the Swipe's Assignment!", color = Color.Black)
+        Text(modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally), text = "Welcome to the Swipe's Assignment!", color = Color.Black)
     }
 }
 
