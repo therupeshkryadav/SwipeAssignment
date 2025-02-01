@@ -303,9 +303,10 @@ fun AddScreen(
     // Show Success or Failure Dialog based on the response
     addProductState?.let {
         if (it.success) {
-            NotificationHelper.sendNotification(context,"Product name: $productName ","Saved Offline and Added Successfully!!")
+            NotificationHelper.sendNotification(context,"Product name: $productName ","Added Successfully!!")
             SuccessDialog(it.message, navSuccess = navSuccess)
         } else {
+            NotificationHelper.sendNotification(context,"Product name: $productName ","Saved Offline, Will Sync later.!!")
             FailureDialog(it.message, navSuccess = navSuccess)
         }
     }
