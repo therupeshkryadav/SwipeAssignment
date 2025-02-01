@@ -40,7 +40,8 @@ fun DetailRow(
     updatedValue: String,
     onValueChange: (String) -> Unit
 ) {
-    var isClicked by remember { mutableStateOf(false) }
+    var isClick by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,31 +57,34 @@ fun DetailRow(
         Spacer(modifier = Modifier.height(4.dp))
 
         Column(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center
         ) {
-
             TextField(
                 value = updatedValue,
-                onValueChange = onValueChange,
+                onValueChange = {
+                    isClick = false
+                    onValueChange(it)
+                },
                 enabled = true,
-                placeholder = { Text( text = placeHolder, color = Color.LightGray) },
+                placeholder = { Text(text = placeHolder, color = Color.LightGray) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .padding(8.dp)
                     .border(
                         width = 1.dp,
-                        color = if(!isError || isClicked) Color.LightGray else Color.Red,
+                        color = if (isClick ) Color.LightGray else if (isError) Color.Red else Color.LightGray,
                         shape = RoundedCornerShape(20.dp)
-                    ).clickable(
+                    )
+                    .clickable(
                         enabled = true,
                         interactionSource = remember { MutableInteractionSource() },
-                        indication = null // Disables ripple effect
-                    ) { isClicked = true }
-                ,
-                isError = isError,
+                        indication = null 
+                    ) {
+                        isClick = true
+                    },
+                isError = isError && !isClick, // Hide error on click
                 textStyle = TextStyle(fontSize = 16.sp),
                 singleLine = true,
                 keyboardOptions = keyboardOptions,
@@ -102,17 +106,18 @@ fun DetailRow(
                 )
             )
 
-            if(isError && !isClicked){
+            // ✅ Hide error message when clicked
+            if (isError && !isClick) {
                 Text(
                     modifier = Modifier.padding(start = 16.dp),
-                    text = errorMessage,color = Color.Red,
+                    text = errorMessage,
+                    color = Color.Red,
                     fontSize = 12.sp
                 )
             }
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -122,7 +127,7 @@ fun DetailRowPreview() {
         updatedValue = "new",
         placeHolder = "---",
         onValueChange = { },
-        isError = true,
+        isError = false,
         errorMessage = "Required !!",
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number, // Sets numeric keyboard

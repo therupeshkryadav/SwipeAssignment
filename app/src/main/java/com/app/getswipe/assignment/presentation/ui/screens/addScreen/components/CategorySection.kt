@@ -39,7 +39,7 @@ fun CategorySection(
 ) {
     // Track dropdown state
     var isSelected by remember { mutableStateOf(false) }
-    var isClicked by remember { mutableStateOf(false) }
+    var isClick by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -57,7 +57,10 @@ fun CategorySection(
 
         TextField(
             value = updatedCategory,
-            onValueChange = onCategoryChange, // No need for manual input, selection happens from dropdown
+            onValueChange = {
+                isClick = false
+                onCategoryChange(it)
+                            }, // No need for manual input, selection happens from dropdown
             placeholder = {
                 Text(text = "Select a category", color = Color.Gray)
             },
@@ -68,7 +71,11 @@ fun CategorySection(
                 .background(Color.White, RoundedCornerShape(20.dp))
                 .border(
                     width = 1.dp,
-                    color = if(!isError || isClicked) Color.LightGray else Color.Red,
+                    color = when {
+                        isError && !isClick -> Color.Red
+                        isClick -> Color.Yellow
+                        else -> Color.LightGray
+                    },
                     shape = RoundedCornerShape(20.dp)
                 )
                 .clickable(
@@ -76,7 +83,7 @@ fun CategorySection(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null // Disables ripple effect
                 ) {
-                    isClicked = true
+                    isClick = true
                     isSelected = !isSelected // Toggle dropdown arrow state
                     onCategorySelection()
                 },
@@ -103,7 +110,7 @@ fun CategorySection(
             textStyle = TextStyle(fontSize = 16.sp)
         )
 
-        if(isError && !isClicked){
+        if(isError && !isClick){
             Text(
                 modifier = Modifier.padding(start = 16.dp,top = 8.dp),
                 text = errorMessage,color = Color.Red,
@@ -122,7 +129,7 @@ fun CategorySectionPreview() {
         updatedCategory = selectedCategory,
         onCategoryChange = { selectedCategory = it },
         onCategorySelection = {  },
-        isError = true,
+        isError = false,
         errorMessage = "Required!!"
     )
 }
