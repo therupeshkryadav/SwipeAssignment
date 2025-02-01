@@ -69,7 +69,7 @@ class ProductViewModel(
         viewModelScope.launch {
             try {
                 val response = addProductUseCase.execute(
-                    image = image,
+                    images = image,
                     productName = productName,
                     productType = productType,
                     price = price,

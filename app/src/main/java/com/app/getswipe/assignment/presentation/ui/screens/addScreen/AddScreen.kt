@@ -149,7 +149,7 @@ fun AddScreen(
                         }
 
                         val imageParts = listOfNotNull(imagePart)
-                        Log.d("images", imageParts.toString())
+                        Log.d("images", imageParts.toString() + selectedProductImageUri)
                         val productNameRequestBody =
                             productName.toRequestBody("text/plain".toMediaTypeOrNull())
                         val productTypeRequestBody =

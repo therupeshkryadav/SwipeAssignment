@@ -2,6 +2,7 @@ package com.app.getswipe.assignment.data.repository
 
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import com.app.getswipe.assignment.data.api.AddProductResponse
 import com.app.getswipe.assignment.data.api.ProductRemoteDataSource
 import com.app.getswipe.assignment.data.local.SharedPreferencesDataSource
@@ -51,9 +52,11 @@ class ProductRepositoryImpl(
         productType: RequestBody,
         price: RequestBody,
         tax: RequestBody,
-        files: String
+        images:String,
+        files: List<MultipartBody.Part>
     ) {
-        sharedPreferencesHelper.saveProductOffline(productName, productType, price, tax, files)
+        Log.d("CheckXX", images + "   " + files)
+        sharedPreferencesHelper.saveProductOffline(productName, productType, price, tax, images ,files)
     }
 
     // Get offline products to show when the network is not available

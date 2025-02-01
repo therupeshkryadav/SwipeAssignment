@@ -8,7 +8,7 @@ import org.koin.dsl.module
 
 val domainModule = module {
     single { GetProductsUseCase(get(), get()) }
-    single { AddProductUseCase(get(), get()) }
+    single { AddProductUseCase(get()) }
     single { SyncOfflineProductsUseCase(get(), get()) }
     single { SearchProductsUseCase(get()) }
 }

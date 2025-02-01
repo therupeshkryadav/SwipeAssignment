@@ -6,6 +6,7 @@ import com.app.getswipe.assignment.domain.model.Product
 import com.app.getswipe.assignment.utils.convertRequestBodyToString
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferences) {
@@ -18,7 +19,8 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
         productType: RequestBody,
         price: RequestBody,
         tax: RequestBody,
-        files: String
+        images: String,
+        files: List<MultipartBody.Part>
     ) {
         // Convert RequestBody to String
         val productNameStr = convertRequestBodyToString(productName)
@@ -27,7 +29,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
         val taxDouble = convertRequestBodyToString(tax).toDoubleOrNull() ?: 0.0
 
 
-        Log.d("fatalI",files)
+        Log.d("fatalI",files.toString())
 
         val offlineProducts = getOfflineProducts().toMutableList()
 
@@ -36,7 +38,8 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
             product_type = productTypeStr,
             price = priceDouble,
             tax = taxDouble,
-            image = files
+            image = images,
+            files = files
         )
 
         // Add the product to the offline list
@@ -59,7 +62,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
 
 
     companion object {
-        private const val OFFLINE_PRODUCTS_KEY = "saved_products"
+        private const val OFFLINE_PRODUCTS_KEY = "saved_product"
     }
 }
 

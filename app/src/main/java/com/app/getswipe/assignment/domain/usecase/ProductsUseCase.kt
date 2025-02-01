@@ -2,6 +2,7 @@ package com.app.getswipe.assignment.domain.usecase
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.util.Log
 import androidx.core.net.toUri
 import com.app.getswipe.assignment.data.api.AddProductResponse
 import com.app.getswipe.assignment.data.repository.isNetworkAvailable
@@ -34,50 +35,38 @@ class SearchProductsUseCase(private val productRepository: ProductRepository) {
 }
 
 class AddProductUseCase(
-    private val repository: ProductRepository,
-    private val connectivityManager: ConnectivityManager
+    private val repository: ProductRepository
 ) {
     suspend fun execute(
-        image: String,
+        images: String,
         productName: RequestBody,
         productType: RequestBody,
         price: RequestBody,
         tax: RequestBody,
         files: List<MultipartBody.Part>
     ): AddProductResponse {
-        return if (!isNetworkAvailable(connectivityManager)) {
 
-            repository.saveProductOffline(
-                productName = productName,
-                productType = productType,
-                price = price,
-                tax = tax,
-                files = image
-            )
-            throw Exception("Network unavailable. Product saved offline.")
+        val response = repository.addProduct(
+            productName = productName,
+            productType = productType,
+            price = price,
+            tax = tax,
+            files = files
+        )
+
+        repository.saveProductOffline(
+            productName = productName,
+            productType = productType,
+            price = price,
+            tax = tax,
+            files = files,
+            images = images
+        )
+
+        if (response.success) {
+            return response
         } else {
-
-            repository.saveProductOffline(
-                productName = productName,
-                productType = productType,
-                price = price,
-                tax = tax,
-                files = image
-            )
-
-            val response = repository.addProduct(
-                productName = productName,
-                productType = productType,
-                price = price,
-                tax = tax,
-                files = files
-            )
-
-            if (response.success) {
-                response
-            } else {
-                throw Exception("Failed to add product to Server.\n Product saved offline.")
-            }
+            throw Exception("Failed to add product to Server.\n Product saved offline.")
         }
     }
 }
@@ -91,8 +80,11 @@ class SyncOfflineProductsUseCase(
 
             val offlineProducts = productRepository.getOfflineProducts()
 
-
             for (product in offlineProducts) {
+
+                Log.d("fatalX", product.toString())
+
+                Log.d("fatalX", product.image.toString())
 
                 val imagePart = product.image!!.toUri().let {
                     val infile = uriToFile(it, context)
@@ -103,7 +95,6 @@ class SyncOfflineProductsUseCase(
                 }
 
                 val imageParts = listOfNotNull(imagePart)
-
                 // Call the addProduct repository method
                 productRepository.addProduct(
                     productName = product.product_name.toRequestBody(),

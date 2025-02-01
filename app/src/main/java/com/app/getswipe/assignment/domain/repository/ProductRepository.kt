@@ -21,7 +21,8 @@ interface ProductRepository {
         productType: RequestBody,
         price: RequestBody,
         tax: RequestBody,
-        files: String
+        images:String,
+        files: List<MultipartBody.Part>
     )
 
     fun getOfflineProducts(): List<Product>
