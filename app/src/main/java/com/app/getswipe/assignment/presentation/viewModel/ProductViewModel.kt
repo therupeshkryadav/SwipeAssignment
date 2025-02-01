@@ -59,6 +59,7 @@ class ProductViewModel(
     }
 
     fun addProduct(
+        image: String,
         productName: RequestBody,
         productType: RequestBody,
         price: RequestBody,
@@ -68,6 +69,7 @@ class ProductViewModel(
         viewModelScope.launch {
             try {
                 val response = addProductUseCase.execute(
+                    image = image,
                     productName = productName,
                     productType = productType,
                     price = price,

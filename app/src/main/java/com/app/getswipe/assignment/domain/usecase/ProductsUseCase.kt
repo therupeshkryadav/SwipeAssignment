@@ -38,6 +38,7 @@ class AddProductUseCase(
     private val connectivityManager: ConnectivityManager
 ) {
     suspend fun execute(
+        image: String,
         productName: RequestBody,
         productType: RequestBody,
         price: RequestBody,
@@ -51,7 +52,7 @@ class AddProductUseCase(
                 productType = productType,
                 price = price,
                 tax = tax,
-                files = files
+                files = image
             )
             throw Exception("Network unavailable. Product saved offline.")
         } else {
@@ -61,7 +62,7 @@ class AddProductUseCase(
                 productType = productType,
                 price = price,
                 tax = tax,
-                files = files
+                files = image
             )
 
             val response = repository.addProduct(

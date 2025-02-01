@@ -51,7 +51,7 @@ class ProductRepositoryImpl(
         productType: RequestBody,
         price: RequestBody,
         tax: RequestBody,
-        files: List<MultipartBody.Part>
+        files: String
     ) {
         sharedPreferencesHelper.saveProductOffline(productName, productType, price, tax, files)
     }

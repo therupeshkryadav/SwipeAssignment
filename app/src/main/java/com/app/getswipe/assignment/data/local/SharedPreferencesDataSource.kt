@@ -22,7 +22,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
         productType: RequestBody,
         price: RequestBody,
         tax: RequestBody,
-        files: List<MultipartBody.Part>
+        files: String
     ) {
         // Convert RequestBody to String
         val productNameStr = convertRequestBodyToString(productName)
@@ -30,10 +30,8 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
         val priceDouble = convertRequestBodyToString(price).toDoubleOrNull() ?: 0.0
         val taxDouble = convertRequestBodyToString(tax).toDoubleOrNull() ?: 0.0
 
-        val imageFile = files.firstOrNull()
-        val filePath = imageFile?.let { getFilePathFromUri(context, it.toString().toUri()) }
 
-        Log.d("fatalI",filePath.toString())
+        Log.d("fatalI",files)
 
         val offlineProducts = getOfflineProducts().toMutableList()
 
@@ -42,7 +40,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
             product_type = productTypeStr,
             price = priceDouble,
             tax = taxDouble,
-            image = filePath
+            image = files
         )
 
         // Add the product to the offline list

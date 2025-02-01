@@ -164,6 +164,7 @@ fun AddScreen(
                             productType = productTypeRequestBody,
                             price = priceRequestBody,
                             tax = taxRequestBody,
+                            image = selectedProductImageUri.toString(),
                             files = imageParts
                         )
                     }
