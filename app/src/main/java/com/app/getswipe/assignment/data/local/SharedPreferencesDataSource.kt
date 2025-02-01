@@ -1,18 +1,14 @@
 package com.app.getswipe.assignment.data.local
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import androidx.core.net.toUri
 import com.app.getswipe.assignment.domain.model.Product
 import com.app.getswipe.assignment.utils.convertRequestBodyToString
-import com.app.getswipe.assignment.utils.getFilePathFromUri
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
-class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferences,private val context: Context) {
+class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferences) {
 
     private val gson = Gson()
 
@@ -63,7 +59,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
 
 
     companion object {
-        private const val OFFLINE_PRODUCTS_KEY = "uploaded_products_saved"
+        private const val OFFLINE_PRODUCTS_KEY = "saved_products"
     }
 }
 

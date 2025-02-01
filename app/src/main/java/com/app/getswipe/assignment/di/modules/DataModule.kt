@@ -34,7 +34,7 @@ val dataModule = module {
     single { ProductRemoteDataSource(get()) }
 
     // SharedPreferences
-    single { SharedPreferencesDataSource(androidContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE),get()) }
+    single { SharedPreferencesDataSource(androidContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)) }
 
     // Remote Data Source
     single { ProductRemoteDataSource(get()) }

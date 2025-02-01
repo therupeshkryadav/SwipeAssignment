@@ -96,10 +96,9 @@ fun ProductListScreen(
 
         var isLoading by remember { mutableStateOf(true) } // Track loading state
 
-        // Simulate loading for 2 seconds
         LaunchedEffect(key1 = Unit) {
-            delay(2000) // Simulate 2 seconds delay for loading
-            isLoading = false // After 2 seconds, stop loading
+            delay(2000)
+            isLoading = false
         }
 
         // Show loading dialog while isLoading is true
@@ -123,7 +122,7 @@ fun ProductListScreen(
                             modifier = Modifier.size(64.dp)
                         )
                         Text(
-                            text = "No Products Found. Add some to display!",
+                            text = "No Offline Products Found. Add some to display!",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.Center,
