@@ -51,6 +51,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -347,11 +348,11 @@ fun SuccessDialog(message: String, navSuccess: () -> Unit) {
             ) {
                 Column(
                     modifier = Modifier
-                        .background(Color.Black)
+                        .background(Color.Gray)
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Success!", fontWeight = FontWeight.Bold, color = Color.White)
+                    Text(text = "Success!", textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, color = Color.White)
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = message, color = Color.White)
                     Spacer(modifier = Modifier.height(8.dp))
@@ -395,7 +396,7 @@ fun FailureDialog(message: String, navSuccess: () -> Unit) {
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "Failure!", fontWeight = FontWeight.Bold, color = Color.White)
+                    Text(text = "Failure!" , textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, color = Color.White)
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(text = message, color = Color.White)
                     Spacer(modifier = Modifier.height(8.dp))

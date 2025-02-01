@@ -56,6 +56,14 @@ class AddProductUseCase(
             throw Exception("Network unavailable. Product saved offline.")
         } else {
 
+            repository.saveProductOffline(
+                productName = productName,
+                productType = productType,
+                price = price,
+                tax = tax,
+                files = files
+            )
+
             val response = repository.addProduct(
                 productName = productName,
                 productType = productType,
@@ -75,7 +83,7 @@ class AddProductUseCase(
                     tax = tax,
                     files = files)
 
-                throw Exception("Failed to add product . Product saved offline.")
+                throw Exception("Failed to add product to Server.\n Product saved offline.")
             }
         }
     }
