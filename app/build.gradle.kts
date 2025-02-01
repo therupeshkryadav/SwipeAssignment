@@ -63,9 +63,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // Room database dependencies
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     // Koin
     implementation (libs.koin.androidx.compose)
@@ -74,13 +74,13 @@ dependencies {
     implementation(libs.coil.compose)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation(libs.retrofit)
     // Gson Converter for Retrofit
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation (libs.converter.gson)
 
     // Gson for JSON parsing
-    implementation ("com.google.code.gson:gson:2.8.8")
+    implementation (libs.gson)
     // Notification Permission
-    implementation("com.google.accompanist:accompanist-permissions:0.31.1-alpha")
+    implementation(libs.accompanist.permissions)
 
 }
