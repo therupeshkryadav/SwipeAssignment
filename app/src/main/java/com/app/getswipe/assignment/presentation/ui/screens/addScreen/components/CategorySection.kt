@@ -60,12 +60,12 @@ fun CategorySection(
             onValueChange = {
                 isClick = false
                 onCategoryChange(it)
-                            }, // No need for manual input, selection happens from dropdown
+                            },
             placeholder = {
                 Text(text = "Select a category", color = Color.Gray)
             },
             readOnly = true,
-            enabled = false, // Prevent typing
+            enabled = false,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White, RoundedCornerShape(20.dp))
@@ -73,7 +73,7 @@ fun CategorySection(
                     width = 1.dp,
                     color = when {
                         isError && !isClick -> Color.Red
-                        isClick -> Color.Yellow
+                        isClick -> Color.LightGray
                         else -> Color.LightGray
                     },
                     shape = RoundedCornerShape(20.dp)
