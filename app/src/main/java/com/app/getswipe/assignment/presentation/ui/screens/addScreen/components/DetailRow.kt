@@ -40,8 +40,7 @@ fun DetailRow(
     updatedValue: String,
     onValueChange: (String) -> Unit
 ) {
-    var isClick by remember { mutableStateOf(false) }
-
+    var isErrorTrack = isError
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -63,7 +62,7 @@ fun DetailRow(
             TextField(
                 value = updatedValue,
                 onValueChange = {
-                    isClick = false
+                    isErrorTrack = false
                     onValueChange(it)
                 },
                 enabled = true,
@@ -74,17 +73,10 @@ fun DetailRow(
                     .padding(8.dp)
                     .border(
                         width = 1.dp,
-                        color = if (isClick ) Color.LightGray else if (isError) Color.Red else Color.LightGray,
+                        color = if (isErrorTrack) Color.Red else Color.LightGray,
                         shape = RoundedCornerShape(20.dp)
-                    )
-                    .clickable(
-                        enabled = true,
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null 
-                    ) {
-                        isClick = true
-                    },
-                isError = isError && !isClick, // Hide error on click
+                    ),
+                isError = isError, // Hide error on click
                 textStyle = TextStyle(fontSize = 16.sp),
                 singleLine = true,
                 keyboardOptions = keyboardOptions,
@@ -106,8 +98,7 @@ fun DetailRow(
                 )
             )
 
-            // ✅ Hide error message when clicked
-            if (isError && !isClick) {
+            if (isErrorTrack) {
                 Text(
                     modifier = Modifier.padding(start = 16.dp),
                     text = errorMessage,
@@ -127,7 +118,7 @@ fun DetailRowPreview() {
         updatedValue = "new",
         placeHolder = "---",
         onValueChange = { },
-        isError = false,
+        isError = true,
         errorMessage = "Required !!",
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number, // Sets numeric keyboard

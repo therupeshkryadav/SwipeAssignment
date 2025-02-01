@@ -75,14 +75,6 @@ class AddProductUseCase(
             if (response.success) {
                 response
             } else {
-
-                repository.saveProductOffline(
-                    productName = productName,
-                    productType = productType,
-                    price = price,
-                    tax = tax,
-                    files = files)
-
                 throw Exception("Failed to add product to Server.\n Product saved offline.")
             }
         }

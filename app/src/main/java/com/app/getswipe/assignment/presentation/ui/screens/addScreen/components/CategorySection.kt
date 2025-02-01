@@ -72,8 +72,7 @@ fun CategorySection(
                 .border(
                     width = 1.dp,
                     color = when {
-                        isError && !isClick -> Color.Red
-                        isClick -> Color.LightGray
+                        isError -> Color.Red
                         else -> Color.LightGray
                     },
                     shape = RoundedCornerShape(20.dp)
@@ -129,7 +128,7 @@ fun CategorySectionPreview() {
         updatedCategory = selectedCategory,
         onCategoryChange = { selectedCategory = it },
         onCategorySelection = {  },
-        isError = false,
+        isError = true,
         errorMessage = "Required!!"
     )
 }
