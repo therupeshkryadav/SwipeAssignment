@@ -62,7 +62,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
 
 
     companion object {
-        private const val OFFLINE_PRODUCTS_KEY = "saved_product"
+        private const val OFFLINE_PRODUCTS_KEY = "saved_products"
     }
 }
 
