@@ -1,10 +1,14 @@
 package com.app.getswipe.assignment.presentation.navigation
 
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,13 +16,14 @@ import com.app.getswipe.assignment.presentation.ui.screens.addScreen.AddScreen
 import com.app.getswipe.assignment.presentation.ui.screens.productList.ProductListScreen
 import com.app.getswipe.assignment.presentation.ui.screens.splash.SplashContent
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun AppNavGraph(
     startDestination: String = "splash_content",
     context: Context
 ) {
     val navController = rememberNavController()
+
+
     NavHost(navController, startDestination = startDestination) {
         composable("splash_content") {
             SplashContent(

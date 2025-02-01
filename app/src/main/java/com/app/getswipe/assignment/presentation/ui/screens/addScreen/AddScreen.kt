@@ -1,12 +1,11 @@
 package com.app.getswipe.assignment.presentation.ui.screens.addScreen
 
+import NotificationHelper
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -61,8 +60,6 @@ import com.app.getswipe.assignment.presentation.ui.screens.addScreen.components.
 import com.app.getswipe.assignment.presentation.ui.screens.addScreen.components.DetailRow
 import com.app.getswipe.assignment.presentation.ui.screens.utils.customTopAppBar.CustomTopAppBar
 import com.app.getswipe.assignment.presentation.viewModel.ProductViewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.delay
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -73,8 +70,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun AddScreen(
     navBack: () -> Unit,
@@ -127,6 +122,7 @@ fun AddScreen(
                 IconButton(onClick = { navBack() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        tint = Color.Black,
                         contentDescription = "Back"
                     )
                 }
@@ -173,6 +169,7 @@ fun AddScreen(
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Check,
+                        tint = Color.Black,
                         contentDescription = "Add Product Card Icon"
                     )
                 }
@@ -304,6 +301,7 @@ fun AddScreen(
     // Show Success or Failure Dialog based on the response
     addProductState?.let {
         if (it.success) {
+            NotificationHelper.sendNotification(context,"Product name: $productName ","Saved Offline and Added Successfully!!")
             SuccessDialog(it.message, navSuccess = navSuccess)
         } else {
             FailureDialog(it.message, navSuccess = navSuccess)

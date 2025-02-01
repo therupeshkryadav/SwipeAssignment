@@ -1,10 +1,6 @@
 package com.app.getswipe.assignment.presentation.ui.screens.productList
 
-import android.Manifest
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -48,14 +43,9 @@ import com.app.getswipe.assignment.presentation.ui.screens.productList.component
 import com.app.getswipe.assignment.presentation.ui.screens.utils.customTopAppBar.CustomTopAppBar
 import com.app.getswipe.assignment.presentation.ui.screens.utils.searchBar.SearchBar
 import com.app.getswipe.assignment.presentation.viewModel.ProductViewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ProductListScreen(
     onAddClick: () -> Unit
@@ -64,15 +54,6 @@ fun ProductListScreen(
     val products by productViewModel.products.observeAsState(emptyList())
     val searchQuery by productViewModel.searchQuery.observeAsState("")
 
-    //asking for notification permission
-    val postNotificationPermission =
-        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
-
-    LaunchedEffect(key1 = true) {
-        if (!postNotificationPermission.status.isGranted) {
-            postNotificationPermission.launchPermissionRequest()
-        }
-    }
 
     LaunchedEffect(true) {
         productViewModel.syncOfflineProducts()

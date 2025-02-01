@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base theme for the app -->
+    <style name="Theme.Splash" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/transparent</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/transparent</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
     <style name="Theme.SwipeAssignment" parent="android:Theme.Material.Light.NoActionBar">
         <item name="windowSplashScreenAnimatedIcon">@drawable/transparent</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/transparent</item>
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="android:windowBackground">@color/white</item>
     </style>
-
-    <!-- Theme for the splash screen -->
-    <style name="Theme.Splash" parent="android:Theme.Material.Light.NoActionBar">
-       <item name="windowSplashScreenAnimatedIcon">@drawable/transparent</item>
-        <item name="windowSplashScreenBackground">@color/white</item>
-        <item name="android:windowBackground">@color/white</item>
-    </style>
-
 </resources>
