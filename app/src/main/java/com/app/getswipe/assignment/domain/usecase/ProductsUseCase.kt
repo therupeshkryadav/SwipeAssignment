@@ -1,7 +1,6 @@
 package com.app.getswipe.assignment.domain.usecase
 
 import android.net.ConnectivityManager
-import android.util.Log
 import com.app.getswipe.assignment.data.api.AddProductResponse
 import com.app.getswipe.assignment.data.repository.isNetworkAvailable
 import com.app.getswipe.assignment.domain.model.Product
@@ -15,13 +14,13 @@ class GetProductsUseCase(
     suspend fun execute(): List<Product> {
         return try {
             if (!isNetworkAvailable(connectivityManager)) {
-                productRepository.getOfflineProducts()
+                productRepository.getUploadedProducts()
             } else {
                 productRepository.getAllProducts()
             }
         } catch (e: Exception) {
             // Handle the exception properly (log it, return a fallback value, etc.)
-            productRepository.getOfflineProducts()
+            productRepository.getUploadedProducts()
         }
     }}
 class SearchProductsUseCase(private val productRepository: ProductRepository) {

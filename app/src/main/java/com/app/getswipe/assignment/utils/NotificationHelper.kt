@@ -8,11 +8,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import com.app.getswipe.assignment.R
 import com.app.getswipe.assignment.presentation.ui.MainActivity
 
 object NotificationHelper {
@@ -20,25 +20,24 @@ object NotificationHelper {
     private const val NOTIFICATION_ID = 1
     private const val TAG = "NotificationHelper"
 
+    // Create Notification Channel
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     fun createNotificationChannel(context: Context) {
-
-        // Check for Android 13+ permission (POST_NOTIFICATIONS)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
+                // Request permission if not granted (consider handling the result in onRequestPermissionsResult)
                 ActivityCompat.requestPermissions(
                     context as Activity,
                     arrayOf(Manifest.permission.POST_NOTIFICATIONS),
                     1001
                 )
             }
-        }
 
-        // Create Notification Channel for Android O and above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Create Notification Channel for Android O and above
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 "Product Notifications",
@@ -55,8 +54,8 @@ object NotificationHelper {
         }
     }
 
+    // Send Notification
     fun sendNotification(context: Context, title: String, message: String) {
-
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -66,14 +65,15 @@ object NotificationHelper {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        // Use system default icon for notifications
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(message)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setPriority(NotificationCompat.PRIORITY_HIGH) // 🔥 Ensures heads-up (popup) notification
-            .setDefaults(NotificationCompat.DEFAULT_ALL) // ✅ Enables sound, vibration, lights
-            .setAutoCancel(true) // Dismiss when clicked
-            .setContentIntent(pendingIntent) // Open activity when tapped
+            .setSmallIcon(android.R.drawable.ic_notification_overlay) // Default system icon
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
             .build()
 
         val notificationManager = NotificationManagerCompat.from(context)
@@ -88,3 +88,4 @@ object NotificationHelper {
         Log.d(TAG, "Notification sent: $title - $message")
     }
 }
+

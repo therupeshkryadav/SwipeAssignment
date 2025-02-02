@@ -37,6 +37,7 @@ fun SplashContent(onSplashEnd: () -> Unit) {
         onSplashEnd()
     }
 
+    NotificationHelper.sendNotification(context,"SwipeAssignment","Welcome to the Swipe's Assignment!!")
     // After the splash screen, show the main UI
     Column(
         modifier = Modifier

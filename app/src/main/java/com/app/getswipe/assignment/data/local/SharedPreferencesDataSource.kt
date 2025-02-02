@@ -35,6 +35,7 @@ class SharedPreferencesDataSource(private val sharedPreferences: SharedPreferenc
             tax = convertRequestBodyToString(tax).toDoubleOrNull()?:0.0,
             image = images
         )
+
         val offlineProducts = getOfflineProducts().toMutableList()
         // Add the product to the offline list
         offlineProducts.add(product)

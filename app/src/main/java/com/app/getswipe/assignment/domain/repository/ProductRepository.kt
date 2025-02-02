@@ -15,5 +15,5 @@ interface ProductRepository {
         images: String
     ): AddProductResponse
 
-    suspend fun getOfflineProducts(): List<Product>
+    suspend fun getUploadedProducts(): List<Product>
 }

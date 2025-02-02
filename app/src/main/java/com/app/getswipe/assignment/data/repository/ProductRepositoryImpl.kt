@@ -13,10 +13,10 @@ import com.app.getswipe.assignment.data.api.ProductRemoteDataSource
 import com.app.getswipe.assignment.data.local.SharedPreferencesDataSource
 import com.app.getswipe.assignment.domain.model.Product
 import com.app.getswipe.assignment.domain.repository.ProductRepository
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okio.Path.Companion.toPath
 
 class ProductRepositoryImpl(
     private val productRemoteService: ProductRemoteDataSource,
@@ -26,17 +26,17 @@ class ProductRepositoryImpl(
 ) : ProductRepository {
 
     override suspend fun getAllProducts(): List<Product> {
-        // ✅ Check if the network is available
+        // Check if the network is available
         if (isNetworkAvailable(connectivityManager)) {
             Log.d("ProductAdded", "Network available! Syncing offline products...")
             Toast.makeText(context, "Products Syncing...", Toast.LENGTH_LONG).show()
-            // ✅ Attempt to sync offline products
+            //  Attempt to sync offline products
             syncOfflineProducts()
         } else {
             Log.d("ProductSync", "No network! Offline products remain unsynced.")
         }
 
-        // ✅ Fetch and return online products
+        // Fetch and return online products
         return productRemoteService.getProducts()
     }
 
@@ -52,16 +52,24 @@ class ProductRepositoryImpl(
         tax: RequestBody,
         images: String
     ): AddProductResponse {
-        try {
+        return if (isNetworkAvailable(connectivityManager)) {
+            // If network is available, try sending to the server
+            sendProductToServer(productName, productType, price, tax, images)
+        } else {
+            // If network is unavailable, save product offline
+            saveProductOffline(productName, productType, price, tax, images)
+        }
+    }
 
-            sharedPreferencesHelper.saveProductOffline(
-                productName = productName,
-                productType = productType,
-                price = price,
-                tax = tax,
-                images = getFilePath(context, images.toUri())!!
-            )
-            // ✅ Attempt to send the product to the server
+    private suspend fun sendProductToServer(
+        productName: RequestBody,
+        productType: RequestBody,
+        price: RequestBody,
+        tax: RequestBody,
+        images: String
+    ): AddProductResponse {
+        return try {
+            // Attempt to send the product to the server
             val response = productRemoteService.addProduct(
                 productName = productName,
                 productType = productType,
@@ -70,36 +78,46 @@ class ProductRepositoryImpl(
                 images = images
             )
 
-            if (response.isSuccessful) {
-                Log.d(
-                    "ProductAdded",
-                    "Offline Product Added successfully: ${response.body().toString()}"
-                )
-                Toast.makeText(
-                    context,
-                    "Product Added to the Server Offline Product Added successfully: ${response.body().toString()}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                // ✅ Save the product offline first (handles offline cases)
-
-            }else{
-                Toast.makeText(
-                    context,
-                    "Offline Product Added successfully: ${response.body().toString()}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            return response.body() ?: throw Exception("Empty response from server")
-
+            response.body() ?: throw Exception("Empty response from server")
         } catch (e: Exception) {
-            // ✅ If network request fails, save offline and retry later
-            throw Exception("Product saved offline. Sync will happen when online. Error: ${e.message}")
-
+            // Handle network request failure
+            throw Exception("Failed to add product to server. Error: ${e.message}")
         }
     }
 
+    private  fun saveProductOffline(
+        productName: RequestBody,
+        productType: RequestBody,
+        price: RequestBody,
+        tax: RequestBody,
+        images: String
+    ): AddProductResponse {
+        return try {
+            val imagePath = getFilePath(context, images.toUri()).toString()
+
+            // Save the product offline if the network is unavailable
+            sharedPreferencesHelper.saveProductOffline(
+                productName = productName,
+                productType = productType,
+                price = price,
+                tax = tax,
+                images = imagePath
+            )
+
+            AddProductResponse(
+                success = false,
+                message = "Product saved offline. Sync will happen when online."
+            )
+        } catch (e: Exception) {
+            // Handle error while saving offline
+            throw Exception("Error saving product offline. Error: ${e.message}")
+        }
+    }
+
+
+
     // Get offline products to show when the network is not available
-    override suspend fun getOfflineProducts(): List<Product> {
+    override suspend fun getUploadedProducts(): List<Product> {
         Log.d(
             "ProductXXX",
             "From IMPL --> " + sharedPreferencesHelper.getOfflineProducts().toString()
@@ -108,7 +126,8 @@ class ProductRepositoryImpl(
     }
 
     private suspend fun syncOfflineProducts() {
-        val offlineProducts = sharedPreferencesHelper.getOfflineProducts()
+        val offlineProducts = getUploadedProducts()
+        Log.d("ProductSync", "syncOfflineProducts called")
         if (offlineProducts.isEmpty()) {
             Log.d("ProductSync", "No offline products to sync.")
             return
@@ -119,13 +138,13 @@ class ProductRepositoryImpl(
                 val imageUri = product.image?.toUri()
                 val imagePath = imageUri.toString()
 
-                // Convert data for API request
+
                 val productName = product.product_name.toRequestBody()
                 val productType = product.product_type.toRequestBody()
                 val price = product.price.toString().toRequestBody()
                 val tax = product.tax.toString().toRequestBody()
 
-                // ✅ Send to API
+
                 val response = productRemoteService.addProduct(
                     productName = productName,
                     productType = productType,
@@ -139,12 +158,19 @@ class ProductRepositoryImpl(
                         "ProductAdded",
                         "Offline Product 33 synced successfully: ${product.toString()}"
                     )
-                    Toast.makeText(
-                        context,
-                        "Offline Product Synced Successfully!!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(
+                            context,
+                            "Offline Product ${product.product_name} Synced Successfully!!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    // Remove the synced product and refresh the list
                     sharedPreferencesHelper.removeOfflineProduct(product)
+
+
                 } else {
                     Log.e("ProductSync", "Failed to sync product: ${product.product_name}")
                 }
@@ -154,7 +180,6 @@ class ProductRepositoryImpl(
             }
         }
     }
-
 
 }
 
