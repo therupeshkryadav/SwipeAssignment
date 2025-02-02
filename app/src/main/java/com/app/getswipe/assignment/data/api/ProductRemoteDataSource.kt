@@ -1,11 +1,16 @@
 package com.app.getswipe.assignment.data.api
 
+import android.content.Context
+import androidx.core.net.toUri
 import com.app.getswipe.assignment.domain.model.Product
+import com.app.getswipe.assignment.presentation.ui.screens.addScreen.uriToFile
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Response
 
-class ProductRemoteDataSource(private val productService: ProductService) {
+class ProductRemoteDataSource(private val productService: ProductService,private val context: Context) {
 
     // Fetch all products
     suspend fun getProducts(): List<Product> {
@@ -22,15 +27,24 @@ class ProductRemoteDataSource(private val productService: ProductService) {
         productType: RequestBody,
         price: RequestBody,
         tax: RequestBody,
-        files: List<MultipartBody.Part>  // List of images
+        images:String // List of images
     ): Response<AddProductResponse> {
         return try {
+            val imagePart = images.toUri().let {
+                val infile = uriToFile(it, context)
+                infile?.let { file ->
+                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                    MultipartBody.Part.createFormData("files[]", file.name, requestFile)
+                }
+            }
+
+            val imageParts = listOfNotNull(imagePart)
             productService.addProduct(
                 name = productName,
                 type = productType,
                 price = price,
                 tax = tax,
-                files = files
+                files = imageParts
             )
         } catch (e: Exception) {
             throw Exception("Failed to add product: ${e.message}")  // Throw a custom exception for better error handling

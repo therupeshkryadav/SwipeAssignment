@@ -9,16 +9,13 @@ import com.app.getswipe.assignment.domain.model.Product
 import com.app.getswipe.assignment.domain.usecase.AddProductUseCase
 import com.app.getswipe.assignment.domain.usecase.GetProductsUseCase
 import com.app.getswipe.assignment.domain.usecase.SearchProductsUseCase
-import com.app.getswipe.assignment.domain.usecase.SyncOfflineProductsUseCase
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 class ProductViewModel(
     private val getProductsUseCase: GetProductsUseCase,
     private val searchProductsUseCase: SearchProductsUseCase,
-    private val addProductUseCase: AddProductUseCase,
-    private val syncOfflineProductsUseCase: SyncOfflineProductsUseCase,
+    private val addProductUseCase: AddProductUseCase
 ) : ViewModel() {
 
     private val _products = MutableLiveData<List<Product>>()
@@ -63,8 +60,7 @@ class ProductViewModel(
         productName: RequestBody,
         productType: RequestBody,
         price: RequestBody,
-        tax: RequestBody,
-        files: List<MultipartBody.Part>
+        tax: RequestBody
     ) {
         viewModelScope.launch {
             try {
@@ -73,8 +69,7 @@ class ProductViewModel(
                     productName = productName,
                     productType = productType,
                     price = price,
-                    tax = tax,
-                    files = files
+                    tax = tax
                 )
                 _addProductState.value = response
             } catch (e: Exception) {
@@ -84,15 +79,6 @@ class ProductViewModel(
                     productId = -1,
                     success = false
                 )
-            }
-        }
-    }
-
-    fun syncOfflineProducts() {
-        viewModelScope.launch {
-            val result = syncOfflineProductsUseCase.execute()
-            if (result.isSuccess) {
-                Result.success(result)
             }
         }
     }

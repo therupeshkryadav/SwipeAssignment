@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.getswipe.assignment.R
+import com.app.getswipe.assignment.data.repository.ProductRepositoryImpl
 import com.app.getswipe.assignment.presentation.ui.screens.addScreen.LoadingDialog
 import com.app.getswipe.assignment.presentation.ui.screens.productList.component.ProductItem
 import com.app.getswipe.assignment.presentation.ui.screens.utils.customTopAppBar.CustomTopAppBar
@@ -56,12 +57,8 @@ fun ProductListScreen(
 
 
     LaunchedEffect(true) {
-        productViewModel.syncOfflineProducts()
         productViewModel.getAllProducts()
     }
-
-
-
     // Product List UI
     Column(
         modifier = Modifier

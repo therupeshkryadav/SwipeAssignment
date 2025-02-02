@@ -140,16 +140,8 @@ fun AddScreen(
                         tax.isEmpty() || tax.toDoubleOrNull() == null || tax.toDouble() < 0.0
 
                     if (!isNameError && !isTypeError && !isPriceError && !isTaxError) {
-                        val imagePart = selectedProductImageUri?.let {
-                            val infile = uriToFile(it, context)
-                            infile?.let { file ->
-                                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                                MultipartBody.Part.createFormData("files[]", file.name, requestFile)
-                            }
-                        }
 
-                        val imageParts = listOfNotNull(imagePart)
-                        Log.d("images", imageParts.toString() + selectedProductImageUri)
+                        Log.d("images", selectedProductImageUri.toString())
                         val productNameRequestBody =
                             productName.toRequestBody("text/plain".toMediaTypeOrNull())
                         val productTypeRequestBody =
@@ -164,8 +156,7 @@ fun AddScreen(
                             productType = productTypeRequestBody,
                             price = priceRequestBody,
                             tax = taxRequestBody,
-                            image = selectedProductImageUri.toString(),
-                            files = imageParts
+                            image = selectedProductImageUri.toString()
                         )
                     }
                 }) {

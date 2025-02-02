@@ -31,13 +31,13 @@ val dataModule = module {
     single {
         get<Retrofit>().create(ProductService::class.java)
     }
-    single { ProductRemoteDataSource(get()) }
+    single { ProductRemoteDataSource(get(),get()) }
 
     // SharedPreferences
-    single { SharedPreferencesDataSource(androidContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)) }
+    single { SharedPreferencesDataSource(androidContext().getSharedPreferences("app_prefs", Context.MODE_PRIVATE),get()) }
 
     // Remote Data Source
-    single { ProductRemoteDataSource(get()) }
+    single { ProductRemoteDataSource(get(),get()) }
 
-    single<ProductRepository> { ProductRepositoryImpl(get(), get()) }
+    single<ProductRepository> { ProductRepositoryImpl(get(), get(),get(),get()) }
 }
